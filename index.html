@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jungle Quest: Eco &amp; Word Explorers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Cinzel:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --jungle:#1F4E2C;
+  --jungle-deep:#0F2E1A;
+  --gold:#E0A526;
+  --gold-deep:#B3811A;
+  --parchment:#F4E8C8;
+  --parchment-deep:#E9D6A6;
+  --ink:#3B2A16;
+  --ink-soft:#7A6A4E;
+  --danger:#C0392B;
+  --danger-deep:#8F2A1F;
+  --teal:#2F8F82;
+  --teal-deep:#1F675D;
+  --sky:#3E8FD0;
+  --sky-deep:#2A6AA3;
+  --card:var(--parchment);
+  --line:#D8C48F;
+  color-scheme: light;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:'Nunito',sans-serif;
+  color:#fff;
+  min-height:100%;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  overflow-x:hidden;
+  background:
+    radial-gradient(900px 550px at 50% -10%, rgba(224,165,38,.18), transparent 60%),
+    radial-gradient(700px 500px at 90% 100%, rgba(47,143,130,.18), transparent 55%),
+    radial-gradient(700px 500px at -10% 60%, rgba(62,143,208,.12), transparent 55%),
+    linear-gradient(180deg, var(--jungle) 0%, var(--jungle-deep) 100%);
+}
+h1,h2,h3,.display{font-family:'Baloo 2',sans-serif;}
+.scroll-font{font-family:'Cinzel',serif;}
+.wrap{max-width:1000px;margin:0 auto;padding:28px 20px 60px;}
+
+/* ---------- HUB HEADER ---------- */
+.hub-header{text-align:center;margin-bottom:26px;}
+.hub-eyebrow{
+  display:inline-block;background:var(--gold);color:var(--ink);
+  font-family:'Baloo 2';font-weight:700;font-size:12.5px;
+  padding:7px 16px;border-radius:999px;letter-spacing:.3px;margin-bottom:16px;
+  box-shadow:0 4px 0 var(--gold-deep);
+  border:2px dashed var(--jungle-deep);
+}
+.hub-title{
+  font-size:clamp(30px,5.6vw,50px);font-weight:800;margin:0 0 10px;line-height:1.1;
+  color:#FFF6DE;
+  text-shadow:0 3px 0 rgba(0,0,0,.35), 0 0 24px rgba(224,165,38,.25);
+}
+.hub-sub{color:#DCE9DC;font-size:16.5px;font-weight:700;max-width:580px;margin:0 auto;opacity:.9;}
+
+/* ---------- PANEL ---------- */
+.panel{
+  background:var(--card);color:var(--ink);
+  border-radius:22px;padding:22px;
+  box-shadow:0 12px 0 var(--gold-deep), 0 20px 30px rgba(0,0,0,.4);
+  margin-bottom:20px;
+  border:3px solid var(--parchment-deep);
+}
+.panel h3{margin:0 0 12px;font-size:18px;}
+.seg{display:flex;gap:8px;background:var(--parchment-deep);padding:6px;border-radius:14px;}
+.seg button{
+  flex:1;border:none;background:transparent;padding:11px 10px;border-radius:10px;
+  font-family:'Baloo 2';font-weight:700;font-size:14.5px;color:var(--ink-soft);cursor:pointer;transition:.15s;
+}
+.seg button.active{background:var(--jungle);color:#fff;box-shadow:0 4px 0 var(--jungle-deep);}
+.team-inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.team-inputs.hidden{display:none;}
+.team-field label{display:block;font-size:11.5px;font-weight:800;letter-spacing:.3px;color:var(--ink-soft);margin-bottom:5px;}
+.team-field input{
+  width:100%;border:2px solid var(--line);border-radius:10px;padding:10px 12px;
+  font-family:'Nunito';font-weight:700;font-size:14.5px;outline:none;background:#fff;color:var(--ink);transition:.15s;
+}
+.team-field:nth-child(1) input{border-color:var(--gold-deep);}
+.team-field:nth-child(2) input{border-color:var(--teal-deep);}
+.team-field input:focus{border-color:var(--jungle);}
+.timer-row{margin-top:16px;}
+.timer-row label{font-size:11.5px;font-weight:800;color:var(--ink-soft);letter-spacing:.3px;}
+.timer-row .val{font-family:'Baloo 2';font-weight:800;color:var(--jungle);font-size:15px;}
+input[type=range]{width:100%;accent-color:var(--jungle);margin-top:8px;}
+
+/* ---------- GAME CARDS ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
+.gamecard{
+  border-radius:20px;padding:20px;position:relative;overflow:hidden;cursor:pointer;
+  border:3px solid rgba(255,255,255,.35);text-align:left;color:#fff;min-height:196px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  box-shadow:0 10px 0 rgba(0,0,0,.35), 0 18px 26px rgba(0,0,0,.4);
+  transition:transform .15s ease;
+}
+.gamecard:hover{transform:translateY(-4px);}
+.gamecard:active{transform:translateY(2px);}
+.gamecard .emoji{position:absolute;top:12px;right:12px;font-size:40px;filter:drop-shadow(0 4px 0 rgba(0,0,0,.25));transform:rotate(6deg);}
+.gamecard h3{font-size:20px;margin:0 0 6px;}
+.gamecard p{margin:0;font-size:13px;font-weight:700;opacity:.94;}
+.gamecard .tag{display:inline-block;background:rgba(255,255,255,.22);border-radius:999px;padding:4px 10px;font-size:10.5px;font-weight:800;margin-bottom:10px;width:fit-content;letter-spacing:.3px;}
+.gc-1{background:linear-gradient(145deg,#5CC26B,var(--jungle));}
+.gc-2{background:linear-gradient(145deg,#4FC2B4,var(--teal-deep));}
+.gc-3{background:linear-gradient(145deg,#F2C14E,var(--gold-deep));color:#3B2A16;}
+.gc-3 .tag{background:rgba(0,0,0,.15);}
+.gc-4{background:linear-gradient(145deg,#E8624F,var(--danger-deep));}
+.gc-5{background:linear-gradient(145deg,#6E9CD6,var(--sky-deep));}
+
+/* ---------- GAME SCREEN ---------- */
+.screen{display:none;}
+.screen.active{display:block;}
+.game-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.backbtn{
+  border:none;background:var(--gold);color:var(--ink);font-family:'Baloo 2';font-weight:800;font-size:13.5px;
+  padding:10px 16px;border-radius:12px;cursor:pointer;box-shadow:0 4px 0 var(--gold-deep);
+}
+.backbtn:active{transform:translateY(2px);box-shadow:none;}
+.hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.pill{font-family:'Baloo 2';font-weight:700;font-size:13.5px;padding:9px 15px;border-radius:999px;background:var(--parchment);color:var(--ink);box-shadow:0 4px 0 var(--parchment-deep);}
+.pill.turn{background:var(--gold);color:var(--ink);}
+.pill.timer{background:var(--jungle-deep);color:#fff;min-width:74px;text-align:center;}
+.pill.timer.urgent{background:var(--danger);animation:pulse .6s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+
+.stage{
+  background:var(--card);color:var(--ink);border-radius:22px;padding:24px;min-height:420px;
+  box-shadow:0 12px 0 var(--gold-deep), 0 20px 30px rgba(0,0,0,.4);position:relative;overflow:hidden;
+  border:3px solid var(--parchment-deep);
+}
+.center-msg{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:380px;gap:14px;}
+.center-msg .big-emoji{font-size:60px;}
+.center-msg h2{font-size:26px;margin:0;}
+.center-msg p{color:var(--ink-soft);font-weight:700;max-width:440px;margin:0;}
+.startbtn{
+  border:none;font-family:'Baloo 2';font-weight:800;font-size:17px;color:#fff;padding:15px 32px;border-radius:14px;cursor:pointer;
+  background:linear-gradient(145deg,var(--jungle),var(--jungle-deep));box-shadow:0 6px 0 #071B0F;transition:.1s;
+}
+.startbtn:active{transform:translateY(4px);box-shadow:0 2px 0 #071B0F;}
+.startbtn.teal{background:linear-gradient(145deg,var(--teal),var(--teal-deep));box-shadow:0 6px 0 #123F38;}
+.startbtn.gold{background:linear-gradient(145deg,var(--gold),var(--gold-deep));color:var(--ink);box-shadow:0 6px 0 #7A5C13;}
+.startbtn.danger{background:linear-gradient(145deg,#E8624F,var(--danger-deep));box-shadow:0 6px 0 #5E1B14;}
+.startbtn.sky{background:linear-gradient(145deg,var(--sky),var(--sky-deep));box-shadow:0 6px 0 #1B4A72;}
+
+/* ---------- PICTURE BADGES ---------- */
+.pic-badge{
+  width:66px;height:66px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;
+  margin:0 auto 8px;box-shadow:0 4px 0 rgba(0,0,0,.18), inset 0 -5px 12px rgba(0,0,0,.08), inset 0 5px 8px rgba(255,255,255,.4);
+  border:3px solid #fff;
+}
+.pic-badge.small{width:34px;height:34px;border-radius:11px;font-size:17px;margin:0 auto 3px;box-shadow:0 3px 0 rgba(0,0,0,.18);}
+.pic-bg-food{background:linear-gradient(150deg,#8CE0B4,var(--jungle));}
+.pic-bg-nonfood{background:linear-gradient(150deg,#8FB9E6,var(--sky));}
+.pic-bg-compost{background:linear-gradient(150deg,#8CE0B4,var(--jungle));}
+.pic-bg-recycle{background:linear-gradient(150deg,#7FE0D2,var(--teal));}
+.pic-bg-dispose{background:linear-gradient(150deg,#F2A6A6,var(--danger));}
+.pic-bg-info{background:linear-gradient(150deg,#F2C14E,var(--gold));}
+
+/* ---------- SORT (compost trail) ---------- */
+.sort-arena{position:relative;min-height:380px;}
+.sort-card{
+  position:absolute;left:50%;top:110px;transform:translate(-50%,0);width:min(300px,78%);
+  background:#fff;border:3px solid var(--ink);border-radius:18px;padding:24px 18px;text-align:center;
+  font-family:'Baloo 2';font-weight:700;font-size:19px;box-shadow:0 10px 0 var(--line);
+  transition:transform .25s ease, opacity .25s ease;z-index:5;
+}
+.sort-card.fly-left{transform:translate(-160%,40px) rotate(-18deg);opacity:0;}
+.sort-card.fly-right{transform:translate(60%,40px) rotate(18deg);opacity:0;}
+.bins{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;gap:16px;}
+.bin{flex:1;border-radius:16px 16px 8px 8px;padding:15px 8px 13px;text-align:center;font-family:'Baloo 2';font-weight:800;font-size:15px;color:#fff;border-bottom:7px solid rgba(0,0,0,.2);}
+.bin small{display:block;font-family:'Nunito';font-weight:700;font-size:10.5px;opacity:.9;margin-top:2px;}
+.bin.food{background:linear-gradient(145deg,#5CC26B,var(--jungle));}
+.bin.nonfood{background:linear-gradient(145deg,#6E9CD6,var(--sky-deep));}
+.feedback-flash{position:absolute;inset:0;pointer-events:none;opacity:0;z-index:1;}
+.feedback-flash.good{background:radial-gradient(circle,rgba(92,194,107,.35),transparent 70%);opacity:1;transition:opacity .4s;}
+.feedback-flash.bad{background:radial-gradient(circle,rgba(192,57,43,.3),transparent 70%);opacity:1;transition:opacity .4s;}
+.keyhint{text-align:center;color:var(--ink-soft);font-weight:700;font-size:12.5px;margin-top:10px;}
+
+/* ---------- 3-WAY BIN QUEST ---------- */
+.plates{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+.plate{border-radius:16px;padding:12px 8px;min-height:150px;text-align:center;border:3px dashed rgba(0,0,0,.15);transition:.15s;}
+.plate h4{margin:0 0 6px;font-family:'Baloo 2';font-size:14.5px;}
+.plate.compost{background:#E8F6EA;border-color:var(--jungle);}
+.plate.recycle{background:#E2F6F3;border-color:var(--teal);}
+.plate.dispose{background:#FBE5E2;border-color:var(--danger);}
+.plate.dragover{transform:scale(1.03);box-shadow:0 0 0 4px rgba(0,0,0,.08) inset;}
+.plate .items{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;min-height:26px;}
+.food-pool{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;padding:14px;background:var(--parchment-deep);border-radius:14px;min-height:70px;}
+.foodchip{
+  background:#fff;border:2.5px solid var(--ink);border-radius:16px;padding:8px 12px 9px;
+  font-family:'Baloo 2';font-weight:700;font-size:13px;cursor:grab;user-select:none;box-shadow:0 3px 0 var(--ink);
+  touch-action:none;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:78px;
+}
+.foodchip:active{cursor:grabbing;}
+.foodchip.placed{font-size:11px;font-weight:800;background:#fff;border-radius:999px;padding:5px 10px;display:inline-flex;min-width:0;cursor:default;box-shadow:0 2px 0 var(--ink);}
+
+/* ---------- STEP PUZZLE ---------- */
+.puzzle-title{font-family:'Baloo 2';font-weight:800;font-size:19px;text-align:center;margin-bottom:16px;color:var(--jungle-deep);}
+.puzzle-slots{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.puzzle-slot{
+  min-height:52px;border:3px dashed var(--line);border-radius:14px;background:#fff;
+  display:flex;align-items:center;gap:10px;padding:8px 14px;font-family:'Baloo 2';font-weight:700;font-size:14.5px;
+  cursor:pointer;transition:.15s;
+}
+.puzzle-slot .num{
+  width:28px;height:28px;border-radius:50%;background:var(--parchment-deep);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;font-family:'Baloo 2';font-weight:800;flex-shrink:0;
+}
+.puzzle-slot.filled{border-style:solid;border-color:var(--gold);background:#FFF8E6;}
+.puzzle-slot.correct{border-color:var(--jungle);background:#E8F6EA;}
+.puzzle-slot.wrong{border-color:var(--danger);background:#FBE5E2;}
+.puzzle-pool{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:14px;background:var(--parchment-deep);border-radius:14px;min-height:60px;}
+.puzzle-chip{
+  background:#fff;border:2.5px solid var(--ink);border-radius:14px;padding:9px 14px;
+  font-family:'Nunito';font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 3px 0 var(--ink);max-width:260px;
+}
+.puzzle-chip:active{transform:translateY(2px);box-shadow:none;}
+.puzzle-feedback{text-align:center;font-family:'Baloo 2';font-weight:800;font-size:15px;margin-top:14px;min-height:22px;}
+
+/* ---------- QUIZ (trick trivia) ---------- */
+.qprogress{display:flex;gap:6px;margin-bottom:16px;}
+.qprogress .dot{flex:1;height:7px;border-radius:99px;background:var(--line);}
+.qprogress .dot.done{background:var(--jungle);}
+.qprogress .dot.current{background:var(--gold);}
+.qtext{font-family:'Baloo 2';font-weight:700;font-size:clamp(18px,2.8vw,23px);margin:0 0 20px;line-height:1.3;text-align:center;}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media (max-width:520px){.choices{grid-template-columns:1fr;}}
+.choice{
+  text-align:left;border:3px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;
+  font-family:'Nunito';font-weight:800;font-size:15px;cursor:pointer;display:flex;gap:9px;align-items:center;transition:.12s;
+}
+.choice .letter{width:28px;height:28px;border-radius:50%;background:var(--jungle);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2';font-size:13px;flex-shrink:0;}
+.choice:hover{border-color:var(--sky);transform:translateY(-2px);}
+.choice.correct{background:#E8F6EA;border-color:var(--jungle);}
+.choice.wrong{background:#FBE5E2;border-color:var(--danger);}
+.choice[disabled]{cursor:default;}
+
+/* ---------- MEMORY (ancient scroll) ---------- */
+.memgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+@media (max-width:640px){.memgrid{grid-template-columns:repeat(3,1fr);}}
+.memcard{aspect-ratio:1/1;border-radius:14px;cursor:pointer;position:relative;perspective:600px;}
+.memcard-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .35s;}
+.memcard.flipped .memcard-inner,.memcard.matched .memcard-inner{transform:rotateY(180deg);}
+.memface{position:absolute;inset:0;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;padding:6px;text-align:center;}
+.memface.back{
+  background:linear-gradient(150deg,#F2C14E,var(--gold-deep));color:var(--ink);font-family:'Cinzel';font-size:22px;font-weight:800;
+  box-shadow:0 4px 0 #7A5C13;border:2px dashed rgba(255,255,255,.5);
+}
+.memface.front{background:#fff;transform:rotateY(180deg);border:2.5px solid var(--line);font-size:10.5px;font-weight:800;color:var(--ink);line-height:1.25;gap:3px;}
+.memcard.matched .memface.front{background:#E8F6EA;border-color:var(--jungle);}
+.memcard.wrongflash .memface.front{background:#FBE5E2;border-color:var(--danger);}
+
+/* ---------- SCOREBOARD / RESULTS ---------- */
+.score-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:18px 0;}
+.score-card{background:#fff;border:2px solid var(--line);border-radius:16px;padding:16px 22px;text-align:center;min-width:140px;}
+.score-card .who{font-family:'Baloo 2';font-weight:700;font-size:13px;color:var(--ink-soft);}
+.score-card .num{font-family:'Baloo 2';font-weight:800;font-size:32px;color:var(--gold-deep);}
+.winner-banner{font-family:'Baloo 2';font-weight:800;font-size:22px;color:var(--jungle);}
+
+/* ---------- EDIT MODAL ---------- */
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,25,15,.68);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;}
+.modal-backdrop.active{display:flex;}
+.modal{background:var(--parchment);color:var(--ink);border-radius:20px;max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.5);border:3px solid var(--parchment-deep);}
+.modal h3{margin:0 0 6px;font-size:19px;}
+.modal .hint{color:var(--ink-soft);font-weight:700;font-size:12.5px;margin-bottom:12px;line-height:1.5;}
+.modal textarea{width:100%;min-height:240px;border:2.5px solid var(--line);border-radius:12px;padding:14px;font-family:'SFMono-Regular',Consolas,monospace;font-size:13px;line-height:1.6;resize:vertical;outline:none;background:#fff;color:var(--ink);}
+.modal textarea:focus{border-color:var(--jungle);}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;}
+.btn-secondary{border:2px solid var(--line);background:#fff;color:var(--ink);font-family:'Baloo 2';font-weight:700;padding:10px 16px;border-radius:10px;cursor:pointer;}
+.btn-primary{border:none;background:var(--jungle);color:#fff;font-family:'Baloo 2';font-weight:700;padding:10px 18px;border-radius:10px;cursor:pointer;}
+.err{color:var(--danger);font-weight:800;font-size:12.5px;margin-top:8px;display:none;}
+
+canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:80;}
+footer{text-align:center;color:#CFE0CF;font-weight:700;font-size:12px;margin-top:28px;opacity:.75;}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+
+  <!-- ============ HUB ============ -->
+  <div class="screen active" id="screen-hub">
+    <div class="hub-header">
+      <span class="hub-eyebrow">🗺️ TLE 6 • TERM 2 WEEK 3 • ADVENTURE MODE</span>
+      <h1 class="hub-title">Jungle Quest: Eco &amp; Word Explorers</h1>
+      <p class="hub-sub">Five quest stops through kitchen waste, composting, and Word page numbers, headers &amp; footers — with a real puzzle and some trick questions along the way!</p>
+    </div>
+
+    <div class="panel">
+      <h3>1. Who's on the expedition?</h3>
+      <div class="seg" id="modeSeg">
+        <button class="active" data-mode="solo">🙋 Solo Explorer</button>
+        <button data-mode="teams">🤝 Two Teams</button>
+      </div>
+      <div class="team-inputs hidden" id="teamInputs">
+        <div class="team-field">
+          <label>TEAM 1 NAME</label>
+          <input id="team1name" maxlength="18" value="Team Compass" />
+        </div>
+        <div class="team-field">
+          <label>TEAM 2 NAME</label>
+          <input id="team2name" maxlength="18" value="Team Machete" />
+        </div>
+      </div>
+      <div class="timer-row">
+        <label>QUEST TIMER: <span class="val" id="timerVal">90 seconds</span></label>
+        <input type="range" id="timerSlider" min="60" max="120" step="10" value="90">
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>2. Choose a quest stop</h3>
+      <div class="grid">
+        <button class="gamecard gc-1" data-game="sort">
+          <span class="emoji">🍌</span>
+          <span class="tag">Sorting Trail</span>
+          <h3>Compost Trail</h3>
+          <p>Food waste or non-food waste — sort it fast!</p>
+        </button>
+        <button class="gamecard gc-2" data-game="match">
+          <span class="emoji">🗑️</span>
+          <span class="tag">Drag &amp; Drop</span>
+          <h3>Bin Quest</h3>
+          <p>Compost it, recycle it, or toss it — choose wisely.</p>
+        </button>
+        <button class="gamecard gc-3" data-game="puzzle">
+          <span class="emoji">🧩</span>
+          <span class="tag">Real Puzzle</span>
+          <h3>Step Puzzle</h3>
+          <p>Put the scrambled steps back in the correct order.</p>
+        </button>
+        <button class="gamecard gc-4" data-game="quiz">
+          <span class="emoji">🎭</span>
+          <span class="tag">Trick Trivia</span>
+          <h3>Riddle Vault</h3>
+          <p>Watch out — some questions are traps!</p>
+        </button>
+        <button class="gamecard gc-5" data-game="memory">
+          <span class="emoji">📜</span>
+          <span class="tag">Flip &amp; Find</span>
+          <h3>Ancient Scroll Match</h3>
+          <p>Pair each term with its true meaning.</p>
+        </button>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+        <button class="btn-secondary" onclick="openEditor('sort')">✏️ Edit waste items</button>
+        <button class="btn-secondary" onclick="openEditor('match')">✏️ Edit bin items</button>
+        <button class="btn-secondary" onclick="openEditor('puzzle')">✏️ Edit puzzle steps</button>
+        <button class="btn-secondary" onclick="openEditor('quiz')">✏️ Edit trivia questions</button>
+        <button class="btn-secondary" onclick="openEditor('memory')">✏️ Edit scroll pairs</button>
+      </div>
+    </div>
+    <footer>🗺️ Made for Grade 6 TLE review · works fully offline · your edits are only saved on this device</footer>
+  </div>
+
+  <!-- ============ SORT: COMPOST TRAIL ============ -->
+  <div class="screen" id="screen-sort">
+    <div class="game-top"><button class="backbtn" onclick="goHub()">← Back</button><div class="hud" id="sortHud"></div></div>
+    <div class="stage" id="sortStage"></div>
+  </div>
+
+  <!-- ============ MATCH: BIN QUEST ============ -->
+  <div class="screen" id="screen-match">
+    <div class="game-top"><button class="backbtn" onclick="goHub()">← Back</button><div class="hud" id="matchHud"></div></div>
+    <div class="stage" id="matchStage"></div>
+  </div>
+
+  <!-- ============ PUZZLE: STEP PUZZLE ============ -->
+  <div class="screen" id="screen-puzzle">
+    <div class="game-top"><button class="backbtn" onclick="goHub()">← Back</button><div class="hud" id="puzzleHud"></div></div>
+    <div class="stage" id="puzzleStage"></div>
+  </div>
+
+  <!-- ============ QUIZ: RIDDLE VAULT ============ -->
+  <div class="screen" id="screen-quiz">
+    <div class="game-top"><button class="backbtn" onclick="goHub()">← Back</button><div class="hud" id="quizHud"></div></div>
+    <div class="stage" id="quizStage"></div>
+  </div>
+
+  <!-- ============ MEMORY: ANCIENT SCROLL ============ -->
+  <div class="screen" id="screen-memory">
+    <div class="game-top"><button class="backbtn" onclick="goHub()">← Back</button><div class="hud" id="memoryHud"></div></div>
+    <div class="stage" id="memoryStage"></div>
+  </div>
+
+</div>
+
+<!-- ============ EDIT MODAL ============ -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <h3 id="modalTitle">Edit content</h3>
+    <p class="hint" id="modalHint"></p>
+    <textarea id="modalTextarea" spellcheck="false"></textarea>
+    <p class="err" id="modalErr"></p>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="resetEditorToDefault()">Reset to default</button>
+      <button class="btn-secondary" onclick="closeEditor()">Cancel</button>
+      <button class="btn-primary" onclick="saveEditor()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DATA (editable)
+   ============================================================ */
+const DEFAULT_SORT_ITEMS = [
+  {name:"Banana peel", cat:"food"},
+  {name:"Vegetable scraps", cat:"food"},
+  {name:"Leftover rice", cat:"food"},
+  {name:"Fish bones", cat:"food"},
+  {name:"Fruit peelings", cat:"food"},
+  {name:"Eggshells", cat:"food"},
+  {name:"Coffee grounds", cat:"food"},
+  {name:"Corn husks", cat:"food"},
+  {name:"Plastic food wrapper", cat:"nonfood"},
+  {name:"Empty plastic bottle", cat:"nonfood"},
+  {name:"Aluminum can", cat:"nonfood"},
+  {name:"Used cardboard food box", cat:"nonfood"},
+  {name:"Plastic grocery bag", cat:"nonfood"},
+  {name:"Glass bottle", cat:"nonfood"},
+  {name:"Used tissue", cat:"nonfood"},
+  {name:"Styrofoam container", cat:"nonfood"},
+];
+
+const DEFAULT_MATCH_ITEMS = [
+  {name:"Banana peel", cat:"compost"},
+  {name:"Vegetable scraps", cat:"compost"},
+  {name:"Fruit peelings", cat:"compost"},
+  {name:"Eggshells", cat:"compost"},
+  {name:"Coffee grounds", cat:"compost"},
+  {name:"Glass bottle", cat:"recycle"},
+  {name:"Aluminum can", cat:"recycle"},
+  {name:"Cardboard box", cat:"recycle"},
+  {name:"Clean paper", cat:"recycle"},
+  {name:"Plastic bottle", cat:"recycle"},
+  {name:"Dirty food wrapper", cat:"dispose"},
+  {name:"Used tissue", cat:"dispose"},
+  {name:"Styrofoam container", cat:"dispose"},
+  {name:"Plastic straw", cat:"dispose"},
+];
+
+const DEFAULT_PUZZLES = [
+  {title:"How to Insert a Page Number", steps:[
+    "Open the Insert tab",
+    "Click the Page Number command",
+    "Choose Top of Page, Bottom of Page, or Page Margins",
+    "Select a page number style",
+    "Press Esc to lock the header and footer"
+  ]},
+  {title:"How to Create a Header or Footer", steps:[
+    "Double-click the top or bottom margin",
+    "Wait for the Design tab to appear",
+    "Type the header or footer information",
+    "Click Close Header and Footer"
+  ]},
+  {title:"How to Compost Kitchen Waste", steps:[
+    "Collect food scraps like peelings and leftovers",
+    "Place them in a compost bin or pile",
+    "Put the bin in a sunny spot and turn it regularly",
+    "Wait for it to turn into nutrient-rich soil"
+  ]},
+  {title:"How to Manage Kitchen Waste Properly", steps:[
+    "Segregate food waste from non-food waste",
+    "Decide if it can be composted or recycled",
+    "Compost food scraps or recycle clean materials",
+    "Properly dispose of what is left in the trash bin"
+  ]},
+  {title:"How to Plan Meals to Reduce Waste", steps:[
+    "List the meals you will cook for the week",
+    "Buy only the ingredients you need",
+    "Use perishable items first",
+    "Store leftovers properly to avoid spoilage"
+  ]},
+];
+
+const DEFAULT_QUIZ = [
+  {q:"TRICK! Which one is NOT really food waste, even though it touches food?",
+   choices:["Banana peel","Vegetable scraps","Plastic food wrapper","Fish bones"], correct:2},
+  {q:"About what percent of all food produced in the U.S. goes uneaten?",
+   choices:["10%","25%","40%","60%"], correct:2},
+  {q:"Which greenhouse gas is released when food waste rots in landfills?",
+   choices:["Oxygen","Methane","Helium","Nitrogen"], correct:1},
+  {q:"What is composting?",
+   choices:["Burning trash","Breaking down organic matter into soil","Melting plastic","Freezing leftovers"], correct:1},
+  {q:"TRICK! True or false: A header always appears at the BOTTOM of the page.",
+   choices:["True","False","Only on the first page","It depends on your mood"], correct:1},
+  {q:"Where do you click first to insert a page number in MS Word?",
+   choices:["Home tab","Insert tab","View tab","Design tab"], correct:1},
+  {q:"TRICK! Which of these is the odd one out?",
+   choices:["Glass bottle","Aluminum can","Banana peel","Cardboard box"], correct:2},
+  {q:"What key do you press to lock the header and footer after adding a page number?",
+   choices:["Enter","Esc","Tab","Shift"], correct:1},
+  {q:"A footer is usually found where on the page?",
+   choices:["Top margin","Bottom margin","Left margin","Center of the page"], correct:1},
+  {q:"Which of these is a GOOD way to reduce kitchen waste?",
+   choices:["Buying more than you need","Planning meals for the week","Throwing away leftovers immediately","Mixing all waste together"], correct:1},
+  {q:"TRICK! Which item, though made of plastic, is often mistaken as compostable because it once held food?",
+   choices:["Yogurt cup","Banana peel","Vegetable scraps","Eggshells"], correct:0},
+  {q:"What tool in Word lets you add info like the author's name at the top of every page?",
+   choices:["Footer","Header","Watermark","Page Border"], correct:1},
+];
+
+const DEFAULT_MEMORY = [
+  {term:"Food Waste", def:"Biodegradable kitchen scraps like peelings and leftovers"},
+  {term:"Non-Food Waste", def:"Waste like plastic, glass, and metal that isn't from food"},
+  {term:"Composting", def:"Breaking down organic matter into nutrient-rich soil"},
+  {term:"Recycling", def:"Turning waste materials into new products"},
+  {term:"Proper Disposal", def:"Throwing waste in the correct trash bin"},
+  {term:"Page Number", def:"An automatic number showing which page you're on"},
+  {term:"Header", def:"Text that appears in the top margin of every page"},
+  {term:"Footer", def:"Text that appears in the bottom margin of every page"},
+  {term:"Methane", def:"A potent greenhouse gas released by rotting food waste"},
+  {term:"Segregate", def:"To separate waste into different categories"},
+];
+
+function loadList(key, fallback){
+  try{
+    const raw = localStorage.getItem(key);
+    if(!raw) return JSON.parse(JSON.stringify(fallback));
+    const parsed = JSON.parse(raw);
+    if(Array.isArray(parsed) && parsed.length) return parsed;
+    return JSON.parse(JSON.stringify(fallback));
+  }catch(e){ return JSON.parse(JSON.stringify(fallback)); }
+}
+function saveList(key, list){ try{ localStorage.setItem(key, JSON.stringify(list)); }catch(e){} }
+
+let sortItems = loadList('quest_sort', DEFAULT_SORT_ITEMS);
+let matchItems = loadList('quest_match', DEFAULT_MATCH_ITEMS);
+let puzzlePool = loadList('quest_puzzle', DEFAULT_PUZZLES);
+let quizItems = loadList('quest_quiz', DEFAULT_QUIZ);
+let memoryPairs = loadList('quest_memory', DEFAULT_MEMORY);
+
+/* ============================================================
+   SETUP STATE
+   ============================================================ */
+let MODE='solo', TEAM1='Team Compass', TEAM2='Team Machete', ROUND_SECONDS=90;
+const modeSeg = document.getElementById('modeSeg');
+modeSeg.addEventListener('click', e=>{
+  const btn = e.target.closest('button'); if(!btn) return;
+  MODE = btn.dataset.mode;
+  [...modeSeg.children].forEach(b=>b.classList.toggle('active', b===btn));
+  document.getElementById('teamInputs').classList.toggle('hidden', MODE!=='teams');
+});
+document.getElementById('team1name').addEventListener('input', e=> TEAM1 = e.target.value.trim() || 'Team 1');
+document.getElementById('team2name').addEventListener('input', e=> TEAM2 = e.target.value.trim() || 'Team 2');
+const timerSlider = document.getElementById('timerSlider');
+timerSlider.addEventListener('input', ()=>{
+  ROUND_SECONDS = parseInt(timerSlider.value,10);
+  document.getElementById('timerVal').textContent = ROUND_SECONDS + ' seconds';
+});
+document.querySelectorAll('.gamecard').forEach(card=>{
+  card.addEventListener('click', ()=> launchGame(card.dataset.game));
+});
+function goHub(){
+  stopAllTimers();
+  window.removeEventListener('keydown', sortKeyHandler);
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-hub').classList.add('active');
+}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function launchGame(game){
+  if(game==='sort') startSortIntro();
+  if(game==='match') startMatchIntro();
+  if(game==='puzzle') startPuzzleIntro();
+  if(game==='quiz') startQuizIntro();
+  if(game==='memory') startMemoryIntro();
+}
+
+/* ============================================================
+   ICONS
+   ============================================================ */
+const ICON_KEYWORDS = [
+  [/banana/i,'🍌'],[/vegetable/i,'🥬'],[/rice/i,'🍚'],[/fish/i,'🐟'],[/fruit/i,'🍎'],
+  [/egg/i,'🥚'],[/coffee/i,'☕'],[/corn/i,'🌽'],[/plastic bottle|water bottle/i,'🧴'],
+  [/plastic (food )?wrapper|wrapper/i,'🧻'],[/aluminum|can/i,'🥫'],[/cardboard/i,'📦'],
+  [/plastic (grocery )?bag|bag/i,'🛍️'],[/glass/i,'🍾'],[/tissue/i,'🧻'],[/styrofoam/i,'🥡'],
+  [/paper/i,'📄'],[/straw/i,'🥤'],
+  [/page number/i,'🔢'],[/header/i,'📋'],[/footer/i,'📃'],[/methane/i,'☁️'],[/segregate/i,'🗂️'],
+  [/compost/i,'🌱'],[/recycl/i,'♻️'],[/dispos/i,'🚮'],[/food waste/i,'🍌'],[/non-food/i,'🧴'],
+];
+function iconFor(name, cat){
+  for(const [re,emoji] of ICON_KEYWORDS){ if(re.test(name)) return emoji; }
+  const catDefaults = {food:'🍌',nonfood:'🧴',compost:'🌱',recycle:'♻️',dispose:'🚮'};
+  return catDefaults[cat] || '⭐';
+}
+function bgClassFor(cat){
+  const map = {food:'pic-bg-food',nonfood:'pic-bg-nonfood',compost:'pic-bg-compost',recycle:'pic-bg-recycle',dispose:'pic-bg-dispose'};
+  return map[cat] || 'pic-bg-info';
+}
+function picBadge(name, cat, size){
+  const sizeClass = size==='small' ? 'small' : '';
+  return `<div class="pic-badge ${sizeClass} ${bgClassFor(cat)}">${iconFor(name,cat)}</div>`;
+}
+
+/* ============================================================
+   SOUND
+   ============================================================ */
+let actx;
+function beep(freq=440, dur=0.09, type='sine', vol=0.15){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const o = actx.createOscillator(); const g = actx.createGain();
+    o.type = type; o.frequency.value = freq; g.gain.value = vol;
+    o.connect(g); g.connect(actx.destination); o.start();
+    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+    o.stop(actx.currentTime + dur + 0.02);
+  }catch(e){}
+}
+function sfxGood(){ beep(740,.08,'triangle',.18); setTimeout(()=>beep(988,.12,'triangle',.16),70); }
+function sfxBad(){ beep(180,.18,'sawtooth',.14); }
+function sfxTick(){ beep(880,.03,'square',.05); }
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+const confettiCanvas = document.getElementById('confetti');
+const cctx = confettiCanvas.getContext('2d');
+function resizeConfetti(){ confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight; }
+resizeConfetti(); window.addEventListener('resize', resizeConfetti);
+let confettiPieces = [];
+function fireConfetti(n=140){
+  const colors=['#E0A526','#5CC26B','#4FC2B4','#E8624F','#3E8FD0'];
+  for(let i=0;i<n;i++){
+    confettiPieces.push({
+      x: Math.random()*confettiCanvas.width, y: -20 - Math.random()*200,
+      w: 6+Math.random()*6, h: 8+Math.random()*10, vy: 2+Math.random()*3.5, vx: -2+Math.random()*4,
+      rot: Math.random()*360, vr: -10+Math.random()*20,
+      color: colors[Math.floor(Math.random()*colors.length)], life: 0
+    });
+  }
+  if(!confettiRunning){ confettiRunning=true; requestAnimationFrame(runConfetti); }
+}
+let confettiRunning=false;
+function runConfetti(){
+  cctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+  confettiPieces.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life++;
+    cctx.save(); cctx.translate(p.x,p.y); cctx.rotate(p.rot*Math.PI/180);
+    cctx.fillStyle=p.color; cctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); cctx.restore();
+  });
+  confettiPieces = confettiPieces.filter(p=> p.y < confettiCanvas.height+40 && p.life<400);
+  if(confettiPieces.length>0){ requestAnimationFrame(runConfetti); }
+  else{ confettiRunning=false; cctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height); }
+}
+
+/* ============================================================
+   UTIL + SESSION RUNNER
+   ============================================================ */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+let activeTimers = [];
+function stopAllTimers(){ activeTimers.forEach(t=>clearInterval(t)); activeTimers=[]; }
+
+function runSession(playRound, showResults){
+  if(MODE==='solo'){
+    playRound('Player', (score)=> showResults([{label:'Player', score}]) );
+  } else {
+    playRound(TEAM1, (score1)=>{
+      playRound(TEAM2, (score2)=>{
+        showResults([{label:TEAM1,score:score1},{label:TEAM2,score:score2}]);
+      });
+    });
+  }
+}
+
+function renderResults(stageEl, results, gameLabel, onReplay){
+  let winnerHtml = '';
+  if(results.length===2){
+    if(results[0].score===results[1].score){ winnerHtml = `<div class="winner-banner">🤝 It's a tie!</div>`; }
+    else{ const w = results[0].score>results[1].score ? results[0] : results[1];
+      winnerHtml = `<div class="winner-banner">🏆 ${escapeHtml(w.label)} wins!</div>`; }
+    fireConfetti(160);
+  } else { winnerHtml = `<div class="winner-banner">🎉 Quest complete!</div>`; fireConfetti(120); }
+  stageEl.innerHTML = `
+    <div class="center-msg">
+      <div class="big-emoji">🏆</div>
+      <h2>${gameLabel} — Results</h2>
+      ${winnerHtml}
+      <div class="score-row">${results.map(r=>`<div class="score-card"><div class="who">${escapeHtml(r.label)}</div><div class="num">${r.score}</div></div>`).join('')}</div>
+      <button class="startbtn" id="replayBtn">🔁 Play Again</button>
+    </div>`;
+  document.getElementById('replayBtn').onclick = onReplay;
+}
+
+/* ============================================================
+   GAME 1 — COMPOST TRAIL (sort)
+   ============================================================ */
+let sortKeyHandler = null;
+
+function startSortIntro(){
+  showScreen('screen-sort');
+  document.getElementById('sortHud').innerHTML = '';
+  const stage = document.getElementById('sortStage');
+  stage.innerHTML = `
+    <div class="center-msg">
+      <div class="big-emoji">🍌</div>
+      <h2>Compost Trail</h2>
+      <p>An item appears on the trail. Sort it fast: is it food waste or non-food waste?</p>
+      <button class="startbtn" id="sortStartBtn">▶️ Start Quest</button>
+    </div>`;
+  document.getElementById('sortStartBtn').onclick = ()=> runSession(playSortRound, (results)=>{
+    renderResults(document.getElementById('sortStage'), results, 'Compost Trail', startSortIntro);
+  });
+}
+
+function playSortRound(label, onEnd){
+  const stage = document.getElementById('sortStage');
+  const hud = document.getElementById('sortHud');
+  let score=0, secs=ROUND_SECONDS, streak=0;
+  const deck = shuffle(sortItems);
+  let idx=0, current=null, locked=false;
+
+  hud.innerHTML = `<span class="pill turn">🎮 ${escapeHtml(label)}'s turn</span><span class="pill">⭐ <span id="sortScore">0</span></span><span class="pill timer" id="sortTimerPill">${secs}s</span>`;
+  stage.innerHTML = `
+    <div class="sort-arena">
+      <div class="feedback-flash" id="sortFlash"></div>
+      <div id="sortCardHolder"></div>
+      <div class="bins">
+        <div class="bin food" id="binFood">🍌 FOOD WASTE<small>tap or ← swipe</small></div>
+        <div class="bin nonfood" id="binNonfood">🧴 NON-FOOD WASTE<small>tap or swipe →</small></div>
+      </div>
+    </div>
+    <div class="keyhint">Desktop: use ← and → arrow keys too</div>`;
+
+  function nextCard(){
+    if(idx>=deck.length) idx=0;
+    current = deck[idx++]; locked=false;
+    document.getElementById('sortCardHolder').innerHTML = `<div class="sort-card" id="curCard">${picBadge(current.name,current.cat)}${escapeHtml(current.name)}</div>`;
+  }
+  nextCard();
+
+  function judge(pick){
+    if(locked||secs<=0) return;
+    locked=true;
+    const card = document.getElementById('curCard');
+    const correct = current.cat===pick;
+    const flash = document.getElementById('sortFlash');
+    if(correct){ score+=10; streak++; if(streak>=3) score+=2; sfxGood(); flash.className='feedback-flash good'; }
+    else{ streak=0; sfxBad(); flash.className='feedback-flash bad'; }
+    card.classList.add(pick==='food' ? 'fly-left' : 'fly-right');
+    document.getElementById('sortScore').textContent = score;
+    setTimeout(()=>{ flash.className='feedback-flash'; }, 300);
+    setTimeout(()=>{ if(secs>0) nextCard(); }, 260);
+  }
+  document.getElementById('binFood').onclick = ()=> judge('food');
+  document.getElementById('binNonfood').onclick = ()=> judge('nonfood');
+  sortKeyHandler = function(e){
+    if(e.key==='ArrowLeft') judge('food');
+    if(e.key==='ArrowRight') judge('nonfood');
+  };
+  window.addEventListener('keydown', sortKeyHandler);
+
+  const timerPill = document.getElementById('sortTimerPill');
+  const t = setInterval(()=>{
+    secs--;
+    if(secs<=10 && secs>0){ timerPill.classList.add('urgent'); sfxTick(); }
+    timerPill.textContent = Math.max(secs,0)+'s';
+    if(secs<=0){
+      clearInterval(t);
+      window.removeEventListener('keydown', sortKeyHandler);
+      const holder = document.getElementById('sortCardHolder'); if(holder) holder.innerHTML='';
+      onEnd(score);
+    }
+  },1000);
+  activeTimers.push(t);
+}
+
+/* ============================================================
+   GAME 2 — BIN QUEST (3-way match)
+   ============================================================ */
+function startMatchIntro(){
+  showScreen('screen-match');
+  document.getElementById('matchHud').innerHTML = '';
+  const stage = document.getElementById('matchStage');
+  stage.innerHTML = `
+    <div class="center-msg">
+      <div class="big-emoji">🗑️</div>
+      <h2>Bin Quest</h2>
+      <p>Drag (or tap, then tap a bin) each item into Compost, Recycle, or Dispose — before time runs out!</p>
+      <button class="startbtn teal" id="matchStartBtn">▶️ Start Quest</button>
+    </div>`;
+  document.getElementById('matchStartBtn').onclick = ()=> runSession(playMatchRound, (results)=>{
+    renderResults(document.getElementById('matchStage'), results, 'Bin Quest', startMatchIntro);
+  });
+}
+
+function playMatchRound(label, onEnd){
+  const stage = document.getElementById('matchStage');
+  const hud = document.getElementById('matchHud');
+  let score=0, secs=ROUND_SECONDS;
+  let pool = shuffle(matchItems);
+  let placedCount=0, selectedChip=null;
+
+  hud.innerHTML = `<span class="pill turn">🎮 ${escapeHtml(label)}'s turn</span><span class="pill">⭐ <span id="matchScore">0</span></span><span class="pill timer" id="matchTimerPill">${secs}s</span>`;
+  stage.innerHTML = `
+    <div class="plates">
+      <div class="plate compost" data-cat="compost"><h4>🌱 COMPOST</h4><div class="items" id="plateCompost"></div></div>
+      <div class="plate recycle" data-cat="recycle"><h4>♻️ RECYCLE</h4><div class="items" id="plateRecycle"></div></div>
+      <div class="plate dispose" data-cat="dispose"><h4>🚮 DISPOSE</h4><div class="items" id="plateDispose"></div></div>
+    </div>
+    <div class="food-pool" id="foodPool"></div>
+    <div class="keyhint">Drag an item onto a bin — or tap an item, then tap the bin.</div>`;
+
+  const foodPool = document.getElementById('foodPool');
+  function renderPool(){
+    foodPool.innerHTML='';
+    pool.forEach((item,i)=>{
+      const chip = document.createElement('div');
+      chip.className='foodchip';
+      chip.innerHTML = `${picBadge(item.name,item.cat,'small')}<span>${escapeHtml(item.name)}</span>`;
+      chip.draggable=true; chip.dataset.idx=i;
+      chip.addEventListener('dragstart', e=>{ e.dataTransfer.setData('text/plain', i); chip.classList.add('dragging'); });
+      chip.addEventListener('dragend', ()=> chip.classList.remove('dragging'));
+      chip.addEventListener('click', ()=>{
+        if(secs<=0) return;
+        document.querySelectorAll('.foodchip').forEach(c=>c.style.outline='');
+        if(selectedChip===i){ selectedChip=null; return; }
+        selectedChip=i; chip.style.outline='3px solid var(--sky-deep)';
+      });
+      foodPool.appendChild(chip);
+    });
+  }
+  renderPool();
+
+  document.querySelectorAll('.plate').forEach(plate=>{
+    plate.addEventListener('dragover', e=>{ e.preventDefault(); plate.classList.add('dragover'); });
+    plate.addEventListener('dragleave', ()=> plate.classList.remove('dragover'));
+    plate.addEventListener('drop', e=>{
+      e.preventDefault(); plate.classList.remove('dragover');
+      const i = parseInt(e.dataTransfer.getData('text/plain'),10);
+      handleDrop(i, plate.dataset.cat);
+    });
+    plate.addEventListener('click', ()=>{
+      if(selectedChip!==null){ handleDrop(selectedChip, plate.dataset.cat); selectedChip=null; }
+    });
+  });
+
+  function handleDrop(i, cat){
+    if(secs<=0) return;
+    const item = pool[i];
+    if(!item || item._placed) return;
+    const correct = item.cat===cat;
+    if(correct){
+      score+=10; sfxGood(); item._placed=true;
+      const container = document.getElementById(cat==='compost'?'plateCompost':cat==='recycle'?'plateRecycle':'plateDispose');
+      const chip = document.createElement('span');
+      chip.className='foodchip placed';
+      chip.innerHTML = `${iconFor(item.name,item.cat)} ${escapeHtml(item.name)}`;
+      container.appendChild(chip);
+      placedCount++;
+    } else { score = Math.max(0,score-2); sfxBad(); }
+    document.getElementById('matchScore').textContent = score;
+    renderPool();
+    if(placedCount>=pool.length){ clearInterval(t); onEnd(score); }
+  }
+
+  const timerPill = document.getElementById('matchTimerPill');
+  const t = setInterval(()=>{
+    secs--;
+    if(secs<=10 && secs>0){ timerPill.classList.add('urgent'); sfxTick(); }
+    timerPill.textContent = Math.max(secs,0)+'s';
+    if(secs<=0){ clearInterval(t); onEnd(score); }
+  },1000);
+  activeTimers.push(t);
+}
+
+/* ============================================================
+   GAME 3 — STEP PUZZLE (ordering puzzle)
+   ============================================================ */
+function startPuzzleIntro(){
+  showScreen('screen-puzzle');
+  document.getElementById('puzzleHud').innerHTML = '';
+  const stage = document.getElementById('puzzleStage');
+  stage.innerHTML = `
+    <div class="center-msg">
+      <div class="big-emoji">🧩</div>
+      <h2>Step Puzzle</h2>
+      <p>The steps are scrambled! Tap them in the correct order to fill the slots. Get it right for big points, then move to the next puzzle.</p>
+      <button class="startbtn gold" id="puzzleStartBtn">▶️ Start Quest</button>
+    </div>`;
+  document.getElementById('puzzleStartBtn').onclick = ()=> runSession(playPuzzleRound, (results)=>{
+    renderResults(document.getElementById('puzzleStage'), results, 'Step Puzzle', startPuzzleIntro);
+  });
+}
+
+function playPuzzleRound(label, onEnd){
+  const stage = document.getElementById('puzzleStage');
+  const hud = document.getElementById('puzzleHud');
+  let score=0, secs=ROUND_SECONDS;
+  const order = shuffle(puzzlePool);
+  let pIdx=0;
+  let slots=[], chips=[];
+
+  hud.innerHTML = `<span class="pill turn">🎮 ${escapeHtml(label)}'s turn</span><span class="pill">⭐ <span id="puzzleScore">0</span></span><span class="pill timer" id="puzzleTimerPill">${secs}s</span>`;
+
+  function loadPuzzle(){
+    if(pIdx>=order.length) pIdx=0;
+    const puzzle = order[pIdx++];
+    slots = new Array(puzzle.steps.length).fill(null);
+    chips = shuffle(puzzle.steps.map((text,originalIndex)=>({text,originalIndex})));
+    render(puzzle);
+  }
+
+  function render(puzzle){
+    stage.innerHTML = `
+      <div class="puzzle-title">🗺️ ${escapeHtml(puzzle.title)}</div>
+      <div class="puzzle-slots" id="puzzleSlots"></div>
+      <div class="puzzle-pool" id="puzzlePool"></div>
+      <div class="puzzle-feedback" id="puzzleFeedback"></div>`;
+    renderSlots(); renderPoolChips();
+  }
+
+  function renderSlots(){
+    const wrap = document.getElementById('puzzleSlots');
+    wrap.innerHTML = slots.map((chip,i)=>`
+      <div class="puzzle-slot ${chip?'filled':''}" data-slot="${i}">
+        <span class="num">${i+1}</span><span>${chip?escapeHtml(chip.text):'Tap a step below to place it here'}</span>
+      </div>`).join('');
+    [...wrap.children].forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const i = parseInt(el.dataset.slot,10);
+        if(slots[i]){ chips.push(slots[i]); slots[i]=null; renderSlots(); renderPoolChips(); }
+      });
+    });
+  }
+
+  function renderPoolChips(){
+    const wrap = document.getElementById('puzzlePool');
+    wrap.innerHTML = chips.map((c,i)=>`<div class="puzzle-chip" data-chip="${i}">${escapeHtml(c.text)}</div>`).join('');
+    [...wrap.children].forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const i = parseInt(el.dataset.chip,10);
+        const emptySlot = slots.findIndex(s=>s===null);
+        if(emptySlot===-1) return;
+        slots[emptySlot] = chips[i];
+        chips.splice(i,1);
+        renderSlots(); renderPoolChips();
+        if(slots.every(s=>s!==null)){ setTimeout(checkPuzzle, 250); }
+      });
+    });
+  }
+
+  function checkPuzzle(){
+    let correctCount=0;
+    const slotEls = [...document.querySelectorAll('.puzzle-slot')];
+    slots.forEach((chip,i)=>{
+      const isCorrect = chip.originalIndex===i;
+      if(isCorrect) correctCount++;
+      slotEls[i].classList.add(isCorrect?'correct':'wrong');
+    });
+    const allCorrect = correctCount===slots.length;
+    score += correctCount*8 + (allCorrect?20:0);
+    document.getElementById('puzzleScore').textContent = score;
+    const fb = document.getElementById('puzzleFeedback');
+    if(allCorrect){ fb.textContent = '🎉 Perfect order!'; fb.style.color='var(--jungle)'; sfxGood(); }
+    else{ fb.textContent = `${correctCount}/${slots.length} steps correctly placed`; fb.style.color='var(--danger)'; sfxBad(); }
+    setTimeout(()=>{ if(secs>0) loadPuzzle(); }, 1100);
+  }
+
+  loadPuzzle();
+
+  const timerPill = document.getElementById('puzzleTimerPill');
+  const t = setInterval(()=>{
+    secs--;
+    if(secs<=10 && secs>0){ timerPill.classList.add('urgent'); sfxTick(); }
+    timerPill.textContent = Math.max(secs,0)+'s';
+    if(secs<=0){ clearInterval(t); onEnd(score); }
+  },1000);
+  activeTimers.push(t);
+}
+
+/* ============================================================
+   GAME 4 — RIDDLE VAULT (trick trivia)
+   ============================================================ */
+function startQuizIntro(){
+  showScreen('screen-quiz');
+  document.getElementById('quizHud').innerHTML = '';
+  const stage = document.getElementById('quizStage');
+  stage.innerHTML = `
+    <div class="center-msg">
+      <div class="big-emoji">🎭</div>
+      <h2>Riddle Vault</h2>
+      <p>Answer fast — but read carefully! Some questions marked TRICK! are designed to catch you off guard.</p>
+      <button class="startbtn danger" id="quizStartBtn">▶️ Start Quest</button>
+    </div>`;
+  document.getElementById('quizStartBtn').onclick = ()=> runSession(playQuizRound, (results)=>{
+    renderResults(document.getElementById('quizStage'), results, 'Riddle Vault', startQuizIntro);
+  });
+}
+
+function playQuizRound(label, onEnd){
+  const stage = document.getElementById('quizStage');
+  const hud = document.getElementById('quizHud');
+  let score=0, secs=ROUND_SECONDS;
+  let deck = shuffle(quizItems);
+  let qIndex=0, finished=false;
+
+  hud.innerHTML = `<span class="pill turn">🎮 ${escapeHtml(label)}'s turn</span><span class="pill">⭐ <span id="quizScore">0</span></span><span class="pill timer" id="quizTimerPill">${secs}s</span>`;
+
+  function renderQuestion(){
+    if(qIndex>=deck.length) deck = deck.concat(shuffle(quizItems));
+    const q = deck[qIndex];
+    const letters=['A','B','C','D'];
+    const order = shuffle(q.choices.map((c,i)=>({c,i})));
+    const isTrick = /^TRICK!/i.test(q.q);
+    stage.innerHTML = `
+      <div class="qprogress">${Array.from({length:Math.min(deck.length,10)}).map((_,i)=>`<div class="dot ${i<qIndex?'done':i===qIndex?'current':''}"></div>`).join('')}</div>
+      ${isTrick ? '<div class="pic-badge pic-bg-dispose" style="margin:0 auto 12px;">⚠️</div>' : ''}
+      <p class="qtext">${escapeHtml(q.q)}</p>
+      <div class="choices" id="choicesWrap"></div>`;
+    const wrap = document.getElementById('choicesWrap');
+    order.forEach((o,pos)=>{
+      const btn = document.createElement('button');
+      btn.className='choice';
+      btn.innerHTML = `<span class="letter">${letters[pos]}</span><span>${escapeHtml(o.c)}</span>`;
+      btn.onclick = ()=> answer(o.i===q.correct, btn, wrap);
+      wrap.appendChild(btn);
+    });
+  }
+
+  function answer(correct, btn, wrap){
+    if(finished) return;
+    [...wrap.children].forEach(c=>c.disabled=true);
+    if(correct){ score+=10; sfxGood(); btn.classList.add('correct'); }
+    else{ score=Math.max(0,score-3); sfxBad(); btn.classList.add('wrong'); }
+    document.getElementById('quizScore').textContent = score;
+    setTimeout(()=>{ qIndex++; if(secs>0 && !finished) renderQuestion(); }, 550);
+  }
+
+  renderQuestion();
+
+  const timerPill = document.getElementById('quizTimerPill');
+  const t = setInterval(()=>{
+    secs--;
+    if(secs<=10 && secs>0){ timerPill.classList.add('urgent'); sfxTick(); }
+    timerPill.textContent = Math.max(secs,0)+'s';
+    if(secs<=0){ clearInterval(t); finished=true; onEnd(score); }
+  },1000);
+  activeTimers.push(t);
+}
+
+/* ============================================================
+   GAME 5 — ANCIENT SCROLL MATCH (memory)
+   ============================================================ */
+function startMemoryIntro(){
+  showScreen('screen-memory');
+  document.getElementById('memoryHud').innerHTML = '';
+  const stage = document.getElementById('memoryStage');
+  stage.innerHTML = `
+    <div class="center-msg">
+      <div class="big-emoji">📜</div>
+      <h2>Ancient Scroll Match</h2>
+      <p>Flip two scrolls at a time to pair each term with its true meaning. Clear the board before the quest timer ends!</p>
+      <button class="startbtn sky" id="memoryStartBtn">▶️ Start Quest</button>
+    </div>`;
+  document.getElementById('memoryStartBtn').onclick = ()=> runSession(playMemoryRound, (results)=>{
+    renderResults(document.getElementById('memoryStage'), results, 'Ancient Scroll Match', startMemoryIntro);
+  });
+}
+
+function playMemoryRound(label, onEnd){
+  const stage = document.getElementById('memoryStage');
+  const hud = document.getElementById('memoryHud');
+  let score=0, secs=ROUND_SECONDS;
+  const pairCount = Math.min(8, memoryPairs.length);
+  const chosen = shuffle(memoryPairs).slice(0, pairCount);
+  let cards = [];
+  chosen.forEach((p,i)=>{
+    cards.push({pairId:i, kind:'term', text:p.term, icon:iconFor(p.term,'info')});
+    cards.push({pairId:i, kind:'def', text:p.def, icon:iconFor(p.term,'info')});
+  });
+  cards = shuffle(cards);
+  let flipped=[], lockBoard=false, matchedCount=0;
+
+  hud.innerHTML = `<span class="pill turn">🎮 ${escapeHtml(label)}'s turn</span><span class="pill">⭐ <span id="memScore">0</span></span><span class="pill timer" id="memTimerPill">${secs}s</span>`;
+  stage.innerHTML = `<div class="memgrid" id="memGrid"></div>`;
+  const grid = document.getElementById('memGrid');
+  cards.forEach((c,i)=>{
+    const el = document.createElement('div');
+    el.className='memcard'; el.dataset.idx=i;
+    el.innerHTML = `<div class="memcard-inner">
+      <div class="memface back">📜</div>
+      <div class="memface front">${c.kind==='term'?`<div style="font-size:18px;">${c.icon}</div>`:''}${escapeHtml(c.text)}</div>
+    </div>`;
+    el.addEventListener('click', ()=> flipCard(i, el));
+    grid.appendChild(el);
+  });
+
+  function flipCard(i, el){
+    if(lockBoard||secs<=0) return;
+    if(el.classList.contains('flipped')||el.classList.contains('matched')) return;
+    if(flipped.length===2) return;
+    el.classList.add('flipped'); flipped.push({i,el});
+    if(flipped.length===2){
+      lockBoard=true;
+      const [a,b] = flipped;
+      const same = cards[a.i].pairId===cards[b.i].pairId && cards[a.i].kind!==cards[b.i].kind;
+      if(same){
+        score+=15; sfxGood(); a.el.classList.add('matched'); b.el.classList.add('matched');
+        matchedCount++; document.getElementById('memScore').textContent=score;
+        flipped=[]; lockBoard=false;
+        if(matchedCount===pairCount){ clearInterval(t); onEnd(score); }
+      } else {
+        score=Math.max(0,score-2); sfxBad();
+        document.getElementById('memScore').textContent=score;
+        a.el.classList.add('wrongflash'); b.el.classList.add('wrongflash');
+        setTimeout(()=>{
+          a.el.classList.remove('flipped','wrongflash'); b.el.classList.remove('flipped','wrongflash');
+          flipped=[]; lockBoard=false;
+        }, 700);
+      }
+    }
+  }
+
+  const timerPill = document.getElementById('memTimerPill');
+  const t = setInterval(()=>{
+    secs--;
+    if(secs<=10 && secs>0){ timerPill.classList.add('urgent'); sfxTick(); }
+    timerPill.textContent = Math.max(secs,0)+'s';
+    if(secs<=0){ clearInterval(t); onEnd(score); }
+  },1000);
+  activeTimers.push(t);
+}
+
+/* ============================================================
+   EDITOR MODAL
+   ============================================================ */
+let editingGame = null;
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalTitle = document.getElementById('modalTitle');
+const modalHint = document.getElementById('modalHint');
+const modalTextarea = document.getElementById('modalTextarea');
+const modalErr = document.getElementById('modalErr');
+
+function listToText(list, game){
+  if(game==='quiz'){
+    return list.map(q=>{
+      const letters=['A','B','C','D'];
+      return `${q.q} | ${q.choices.join(' | ')} | ${letters[q.correct]||'A'}`;
+    }).join('\n');
+  }
+  if(game==='memory'){ return list.map(p=> `${p.term} | ${p.def}`).join('\n'); }
+  if(game==='puzzle'){ return list.map(p=> `${p.title} | ${p.steps.join(' | ')}`).join('\n'); }
+  return list.map(it=> `${it.name} | ${it.cat}`).join('\n');
+}
+
+function openEditor(game){
+  editingGame = game;
+  modalErr.style.display='none';
+  if(game==='sort'){
+    modalTitle.textContent = 'Edit Compost Trail items';
+    modalHint.innerHTML = 'One item per line: <code>Item text | food</code> or <code>Item text | nonfood</code>.';
+    modalTextarea.value = listToText(sortItems,'sort');
+  } else if(game==='match'){
+    modalTitle.textContent = 'Edit Bin Quest items';
+    modalHint.innerHTML = 'One item per line: <code>Item text | compost</code>, <code>| recycle</code>, or <code>| dispose</code>.';
+    modalTextarea.value = listToText(matchItems,'match');
+  } else if(game==='puzzle'){
+    modalTitle.textContent = 'Edit Step Puzzle sequences';
+    modalHint.innerHTML = 'One puzzle per line: <code>Title | Step 1 | Step 2 | Step 3 ...</code> (3–6 steps, in the CORRECT order).';
+    modalTextarea.value = listToText(puzzlePool,'puzzle');
+  } else if(game==='quiz'){
+    modalTitle.textContent = 'Edit Riddle Vault questions';
+    modalHint.innerHTML = 'One question per line: <code>Question | Choice A | Choice B | Choice C | Choice D | CorrectLetter</code>. Start a question with "TRICK!" to flag it as a trick question.';
+    modalTextarea.value = listToText(quizItems,'quiz');
+  } else if(game==='memory'){
+    modalTitle.textContent = 'Edit Ancient Scroll pairs';
+    modalHint.innerHTML = 'One pair per line: <code>Term | Meaning or definition</code>. Up to 8 pairs are used per round.';
+    modalTextarea.value = listToText(memoryPairs,'memory');
+  }
+  modalBackdrop.classList.add('active');
+}
+function closeEditor(){ modalBackdrop.classList.remove('active'); editingGame=null; }
+function resetEditorToDefault(){
+  if(editingGame==='sort') modalTextarea.value = listToText(DEFAULT_SORT_ITEMS,'sort');
+  if(editingGame==='match') modalTextarea.value = listToText(DEFAULT_MATCH_ITEMS,'match');
+  if(editingGame==='puzzle') modalTextarea.value = listToText(DEFAULT_PUZZLES,'puzzle');
+  if(editingGame==='quiz') modalTextarea.value = listToText(DEFAULT_QUIZ,'quiz');
+  if(editingGame==='memory') modalTextarea.value = listToText(DEFAULT_MEMORY,'memory');
+}
+
+function saveEditor(){
+  const lines = modalTextarea.value.split('\n').map(l=>l.trim()).filter(Boolean);
+  modalErr.style.display='none';
+  try{
+    if(editingGame==='sort' || editingGame==='match'){
+      const validCats = editingGame==='sort' ? ['food','nonfood'] : ['compost','recycle','dispose'];
+      const parsed = lines.map(line=>{
+        const parts = line.split('|').map(s=>s.trim());
+        if(parts.length<2) throw new Error('Each line needs a name and a category, separated by |.');
+        const name = parts[0], cat = parts[1].toLowerCase();
+        if(!name) throw new Error('An item is missing its name.');
+        if(!validCats.includes(cat)) throw new Error(`"${cat}" is not valid. Use: ${validCats.join(', ')}.`);
+        return {name, cat};
+      });
+      if(parsed.length<4) throw new Error('Please keep at least 4 items.');
+      if(editingGame==='sort'){ sortItems=parsed; saveList('quest_sort', sortItems); }
+      else{ matchItems=parsed; saveList('quest_match', matchItems); }
+    } else if(editingGame==='puzzle'){
+      const parsed = lines.map(line=>{
+        const parts = line.split('|').map(s=>s.trim()).filter(Boolean);
+        if(parts.length<4) throw new Error('Each line needs a title and at least 3 steps: Title | Step1 | Step2 | Step3.');
+        const title = parts[0], steps = parts.slice(1);
+        if(steps.length>6) throw new Error('Please keep each puzzle to 6 steps or fewer.');
+        return {title, steps};
+      });
+      if(parsed.length<2) throw new Error('Please keep at least 2 puzzles.');
+      puzzlePool = parsed; saveList('quest_puzzle', puzzlePool);
+    } else if(editingGame==='quiz'){
+      const letters = {A:0,B:1,C:2,D:3};
+      const parsed = lines.map(line=>{
+        const parts = line.split('|').map(s=>s.trim());
+        if(parts.length<6) throw new Error('Each line needs: Question | Choice A | Choice B | Choice C | Choice D | CorrectLetter.');
+        const q = parts[0], choices = parts.slice(1,5), letter = parts[5].toUpperCase();
+        if(!q) throw new Error('A question is empty.');
+        if(choices.some(c=>!c)) throw new Error('All four choices must have text.');
+        if(!(letter in letters)) throw new Error(`"${parts[5]}" is not A, B, C, or D.`);
+        return {q, choices, correct: letters[letter]};
+      });
+      if(parsed.length<3) throw new Error('Please keep at least 3 questions.');
+      quizItems = parsed; saveList('quest_quiz', quizItems);
+    } else if(editingGame==='memory'){
+      const parsed = lines.map(line=>{
+        const parts = line.split('|').map(s=>s.trim());
+        if(parts.length<2) throw new Error('Each line needs a term and a definition, separated by |.');
+        const [term, def] = parts;
+        if(!term || !def) throw new Error('A term or definition is empty.');
+        return {term, def};
+      });
+      if(parsed.length<4) throw new Error('Please keep at least 4 pairs.');
+      memoryPairs = parsed; saveList('quest_memory', memoryPairs);
+    }
+    closeEditor();
+  }catch(err){
+    modalErr.textContent = '⚠️ ' + err.message;
+    modalErr.style.display='block';
+  }
+}
+</script>
+</body>
+</html>
